@@ -7,21 +7,42 @@ object 两数之和1V1 {
     println("---")
   }
 
-  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    var i:Int=0
-    var j = i
-    var res = List[Int]()
-    while(i<nums.length){
-      j=i+1
-      var other = target- nums(i)
-      while(j<nums.length){
+  /**
+   * 1. 守卫
+   * 2. ListBuffer
+   * 3. nums.indices 索引
+   * @param nums
+   * @param target
+   * @return
+   */
 
-        if(other == nums(j))
-          res = (i::j::Nil)
-        j=j+1
+  def twoSum(nums: Array[Int], target: Int): Array[Int] = {
+    val res =  collection.mutable.ListBuffer[Int]()
+    for(i <- nums.indices){
+      val other = -(nums(i) - target)
+      for(j <- nums.indices if j > i && nums(j) == other){
+            res += i
+            res += j
       }
-      i = i +1;
     }
     res.toArray
+
   }
+
+
+  /***
+   * 1. 双重循环
+   * @param nums
+   * @param target
+   * @return
+   */
+  def twoSum1(nums: Array[Int], target: Int): Array[Int] = {
+    val res =  collection.mutable.ListBuffer[Int]()
+    for(i <- nums.indices;j <- nums.indices if j > i && nums(j) == -(nums(i) - target)){
+        res += i
+        res += j
+      }
+    res.toArray
+  }
+
 }
