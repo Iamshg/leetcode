@@ -3,7 +3,23 @@ package MyThread;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
- 
+
+/***
+ * 这其实是 等待/通知的经典范式  也可以叫 生产者、消费者模式
+ *
+ * synchronized(对象) {
+ *      while(条件不满足) {
+ *          对象.wait();
+ *      }
+ *      对应的处理逻辑
+ * }
+ *
+ *
+ * synchronized(对象) {
+ *      改变条件
+ *      对象.notifyAll();
+ * }
+ */
 public class RunoobTest extends Object {
  
     private List synchedList;
@@ -79,10 +95,10 @@ public class RunoobTest extends Object {
         //New Element:'Hello!'
         //notifyAll called!  // 通知所有线程，不用等待了，
         //RunoobWaiting...
-        //Runoob抢先完成synchedList.isEmpty() 判断 // 只有一个元素插入成功，两个线程，所以（只有一个线程能重新竞争到锁，从原来wait的位置开始执行，最终得到remove成功，）（括号里面是同步块中的一起完成的），另一个线程没有竞争到锁，与上次一样的， 判断 synchedList  为空 ，所以wait  ，此时它释放了锁
+        //Runoob抢先完成synchedList.isEmpty() 判断 // 只有一个元素插入成功，两个线程收到通知，现在都是从wait状态变为block状态，下一步抢锁，所以（只有一个线程能重新竞争到锁，从原来wait()的位置开始执行，也就是变成runing状态一个线程,最终得到remove成功，）（括号里面是同步块中的一起完成的），另一个线程没有竞争到锁，与上次一样的， 判断 synchedList  为空 ，所以wait  ，此时它释放了锁
         //Closing...
         //GoogleWaiting...
-        //GoogleList is empty... // 此例中 Google没有抢到锁，等Runoob 取出元素 ，释放锁之后， Google才进去， 所以此时就是空了， 还得wait
+        //GoogleList is empty... // 此例中 Google没有抢到锁，等Runoob 取出元素 ，释放锁之后， Google才从block状态变为running状态，才从wait函数处返回， 但是此时链表 就是空了， 还得wait()，变成wait状态
         //Hello!
         //Interrupted Exception!  // 因为线程 Runoob 取出元素就退出了， 此时只有 线程 Google在wait了，所以，这个nterrupted Exception 是打断了线程 Google的 wait 才抛出的
         try {
