@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /***
+ *
+ * 参考《JAVA并发编程艺术》 4.3.2节
  * 这其实是 等待/通知的经典范式  也可以叫 生产者、消费者模式
  *
  * synchronized(对象) {
